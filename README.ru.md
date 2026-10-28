@@ -177,7 +177,7 @@ perms import [users.ini]
 
 ```
 perms editor
-[perms] Open the editor (an hour): https://amxts.github.io/perms#k3x9q2mw7a
+[perms] Open the editor (an hour): https://amxts.github.io/modules/perms/editor#k3x9q2mw7a
 ```
 
 Ссылка открывает права сервера в браузере: узлы каждого плагина с описаниями,

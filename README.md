@@ -177,7 +177,7 @@ Permissions are changed from the server console and in the web editor only.
 
 ```
 perms editor
-[perms] Open the editor (an hour): https://amxts.github.io/perms#k3x9q2mw7a
+[perms] Open the editor (an hour): https://amxts.github.io/modules/perms/editor#k3x9q2mw7a
 ```
 
 The link opens the server's permissions in the browser: every plugin's nodes
