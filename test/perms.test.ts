@@ -129,7 +129,8 @@ describe("the commands", () => {
 		expect(eve.flags & RESERVATION).toBe(RESERVATION);
 		expect(server.file(`${CONFIGS}/perms.yaml`)).toContain("STEAM_0:1:999");
 
-		server.serverCommand("perms user STEAM_0:1:999 group remove vip");
+		// The engine splits a console line at ':' - the words of a SteamID come apart.
+		server.serverCommand("perms user STEAM_0 : 1 : 999 group remove vip");
 		await server.responses();
 		expect(has(server, eve.id, "shop.discount")).toBe(false);
 	}, 120_000);

@@ -21,8 +21,9 @@ function refreshSlot(id: number) {
 	if (player != null) refresh(player);
 }
 
+/** The words of a command; the engine splits a line at `:`, so `STEAM_0 : 1 : 5` is put back into `STEAM_0:1:5`. */
 function splitWords(text: string) {
-	return text.trim().split(" ").filter(each => each != "");
+	return text.replace(/\s*:\s*/g, ":").trim().split(" ").filter(each => each != "");
 }
 
 export function start(options: PermsOptions) {

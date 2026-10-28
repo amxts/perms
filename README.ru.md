@@ -71,8 +71,10 @@ npx amxts module add perms
 
 ## Файл
 
-`addons/amxmodx/configs/perms.yaml` (или `perms.json`): его пишут команды и
-веб-редактор, его можно править руками:
+`perms.yaml` (или `perms.json`) в папке конфигов, `addons/amxmodx/configs/` -
+или `configs/<baseDir>/`, если проект задал `baseDir` у config-core, как и для
+остальных конфигов. Его пишут команды и веб-редактор, его можно править руками;
+какой файл прочитан, сервер пишет в консоль при старте:
 
 ```yaml
 groups:

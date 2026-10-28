@@ -71,8 +71,10 @@ password - as `users.ini` finds him:
 
 ## The file
 
-`addons/amxmodx/configs/perms.yaml` (or `perms.json`), written by the commands
-and the web editor, and by hand:
+`perms.yaml` (or `perms.json`) in the configs folder, `addons/amxmodx/configs/` -
+or `configs/<baseDir>/` when the project sets config-core's `baseDir`, as other
+configs are. The commands and the web editor write it, and it is edited by hand
+too; the server console says at start which file it read:
 
 ```yaml
 groups:

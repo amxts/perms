@@ -78,6 +78,7 @@ export function readFile() {
 	}
 
 	replaceAll(groups, users);
+	console.log(`[perms] ${root.file}: ${groups.length} groups, ${users.length} players`);
 	return true;
 }
 
