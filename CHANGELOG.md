@@ -1,5 +1,32 @@
 # Changelog
 
+## v0.1.1
+
+> For cores of the 0.3 line from 0.3.2.
+
+A server that runs the editor's store of its own gets its own link. With `PERMS_EDITOR_URL` in `.env`,
+`perms editor` prints the store's address, and the store sends the browser on to the editor page
+with that store:
+
+```
+PERMS_EDITOR_URL=https://perms.myserver.com
+```
+```
+[perms] Open the editor (an hour): https://perms.myserver.com/editor#k3x9q2mw7a
+```
+
+### 👉 Changelog
+
+[compare changes](https://github.com/amxts/perms/compare/v0.1.0...v0.1.1)
+
+### 🚀 Enhancements
+
+- **editor:** A store of your own gives its own link ([3f384fc](https://github.com/amxts/perms/commit/3f384fc))
+
+### ❤️ Contributors
+
+- Ernest Manukyan ([@kukson777](https://github.com/kukson777))
+
 ## v0.1.0
 
 > The first release of Perms, for cores of the 0.3 line from 0.3.2.

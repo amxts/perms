@@ -1,7 +1,7 @@
 {
 	"name": "@amxts/perms",
 	"type": "module",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Permissions and groups for amxts servers in place of admin.amxx: nodes, wildcards, inheritance, temporary grants, a file or MySQL, AMX Mod X's flags for Pawn plugins, and a web editor.",
 	"author": {
 		"name": "kukson777",
