@@ -1,7 +1,8 @@
 /**
- * `perms ...` in the server console, over rcon, and in a player's console or
- * chat (`/perms`) for a player with `perms.edit` (`perms.editor` for the web
- * editor):
+ * `perms ...` in the server console and over rcon. A player with `perms.view`
+ * runs the commands that only show - `groups`, `check`, `nodes`, `user ...
+ * info`, `group ... info` - in his console or chat (`/perms`); changes are the
+ * server console's and the web editor's, which the server console opens:
  *
  *     perms user <player|id> info
  *     perms user <player|id> group add|remove <group> [30d]
@@ -58,14 +59,22 @@ function apply(changes: Change[], print: Print) {
 	});
 }
 
+/** What a player may run: the commands that only show; a change is the server console's or the editor's. */
+function onlyShows(words: string[]) {
+	const what = word(words, 0);
+	const action = word(words, 2);
+	if (what == "user" || what == "group") return action == "" || action == "info";
+	return what == "groups" || what == "check" || what == "nodes";
+}
+
 export async function run(player: Player | null, words: string[], print: Print) {
 	const what = word(words, 0);
-	if (player != null && what == "editor" && !has(player, "perms.editor")) {
-		print("[perms] You need perms.editor");
+	if (player != null && !has(player, "perms.view")) {
+		print("[perms] You need perms.view");
 		return;
 	}
-	if (player != null && what != "editor" && !has(player, "perms.edit")) {
-		print("[perms] You need perms.edit");
+	if (player != null && !onlyShows(words)) {
+		print("[perms] Permissions are changed in the editor: perms editor in the server console");
 		return;
 	}
 

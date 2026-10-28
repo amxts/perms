@@ -21,7 +21,7 @@ groups:
   admin:
     weight: 50
     inherits: [vip]
-    permissions: [amxx.kick, amxx.ban, "kz.admin.*", "-kz.admin.wipe"]
+    permissions: [amxx.kick, amxx.ban, "kz.admin.*", "-kz.admin.wipe", perms.view]
   owner:
     weight: 100
     permissions: ["*"]
@@ -160,12 +160,19 @@ describe("the commands", () => {
 		expect(server.log).toContain("The group \"default\" cannot be deleted");
 	}, 120_000);
 
-	it("a player without perms.edit is refused", async () => {
+	it("a player only looks: perms.view, and no changes from the game", async () => {
 		const server = await boot();
 		const eve = server.join("Eve", { steamId: "STEAM_0:1:999" });
+		const bob = server.join("Bob", { steamId: "STEAM_0:1:100" });
 
 		eve.say("/perms groups");
-		expect(eve.console).toContain("You need perms.edit");
+		expect(eve.console).toContain("You need perms.view");
+
+		bob.say("/perms groups");
+		expect(bob.console).toContain("admin (50)");
+		bob.say("/perms user Bob group add owner");
+		expect(bob.console).toContain("Permissions are changed in the editor");
+		expect(server.native("perms_get_group", bob.id)).toBe("admin");
 	}, 120_000);
 
 	it("users.ini imports as amxx grants", async () => {

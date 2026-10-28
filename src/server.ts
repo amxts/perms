@@ -30,8 +30,7 @@ export function start(options: PermsOptions) {
 	setThisServer(env("PERMS_SERVER", ""));
 	const editor = env("PERMS_EDITOR_URL", "");
 	setStore(editor != "" ? editor : options.editor != "" ? options.editor : DEFAULT_STORE);
-	declare("perms.edit", "Change permissions with the perms commands", false, false);
-	declare("perms.editor", "Open the web editor with perms editor", false, false);
+	declare("perms.view", "See groups and permissions with the perms commands in the game", false, false);
 
 	server.addEventListener("init", () => {
 		const running = ADMIN_PLUGINS.filter(file => find_plugin_byfile(file) >= 0);

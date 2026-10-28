@@ -143,8 +143,7 @@ the editor changes them, or one ends.
 
 ## Commands
 
-In the server console and over rcon, and in a player's console or chat
-(`/perms ...`) for a player with `perms.edit`:
+In the server console and over rcon:
 
 ```
 perms user <player|id> info
@@ -169,6 +168,11 @@ perms import [users.ini]
 A player is `#userid`, a part of his name, or an entry's id
 (`STEAM_0:1:12345`). A duration is `45s`, `90m`, `12h`, `30d` or `2w`.
 
+In the game a player with `perms.view` runs the commands that only show -
+`groups`, `check`, `nodes`, `user ... info` and `group ... info` - in his
+console or in chat (`/perms groups`); the answer comes to his console.
+Permissions are changed from the server console and in the web editor only.
+
 ## The web editor
 
 ```
@@ -181,7 +185,7 @@ with their descriptions, a column per group, the groups, the players. **Save**
 sends the changes back; the server applies them within seconds, without a
 restart, and the page says what it did.
 
-- The command needs `perms.editor` in a player's chat; the server console can always run it.
+- The server console opens it; no player can.
 - Whoever has the link can edit until the session ends: after an hour, or
   `perms editor close`. Share it like a password.
 - What goes to the editor: groups, permissions, SteamIDs and names. Passwords and
