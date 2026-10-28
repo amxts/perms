@@ -1,6 +1,17 @@
+<div align="center">
+
+<img src="assets/logo.svg" width="96" alt="Perms">
+
 # Perms
 
+*Права и группы вместо admin.amxx*
+
+[![amxts module](https://img.shields.io/badge/amxts-module-3178c6?style=flat-square)](https://amxts.github.io/)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
+
 [English](README.md) | **Русский**
+
+</div>
 
 Права и группы для сервера на amxts вместо `admin.amxx` из AMX Mod X: узлы прав
 с масками и запретом, группы с наследованием и весом, временные права, файл или
@@ -100,10 +111,9 @@ users:
 Право или группа со сроком или для одного сервера записываются объектом:
 `{ node: kz.vip, until: 2026-12-01T00:00:00Z, server: kz1 }`. Время - UTC.
 
-::: warning
-Ошибку в файле сервер называет в консоли со строкой, а права, прочитанные до
-неё, остаются: из-за опечатки сервер не останется без админов.
-:::
+> [!WARNING]
+> Ошибку в файле сервер называет в консоли со строкой, а права, прочитанные до
+> неё, остаются: из-за опечатки сервер не останется без админов.
 
 ## MySQL
 
@@ -232,10 +242,11 @@ Pawn-плагины работают без изменений: модуль с�
 | `amxx.banTemp` | `v` |
 | `amxx.admin` | `y` |
 
-::: warning amx_mode
-`amx_mode 2` кикает игрока без записи, как `admin.amxx`: закрытый сервер.
-`amx_mode 0` никому ничего не даёт.
-:::
+> [!WARNING]
+> **amx_mode**
+>
+> `amx_mode 2` кикает игрока без записи, как `admin.amxx`: закрытый сервер.
+> `amx_mode 0` никому ничего не даёт.
 
 Pawn-плагины могут проверять узлы сами: [PAWN.ru.md](PAWN.ru.md).
 

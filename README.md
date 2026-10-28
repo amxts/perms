@@ -1,6 +1,17 @@
+<div align="center">
+
+<img src="assets/logo.svg" width="96" alt="Perms">
+
 # Perms
 
+*Permissions and groups in place of admin.amxx*
+
+[![amxts module](https://img.shields.io/badge/amxts-module-3178c6?style=flat-square)](https://amxts.github.io/)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
+
 **English** | [Русский](README.ru.md)
+
+</div>
 
 Permissions and groups for an amxts server, in place of AMX Mod X's `admin.amxx`:
 permission nodes with wildcards and negation, groups with inheritance and
@@ -100,10 +111,9 @@ users:
 A permission or a group with an end, or for one server, is an object:
 `{ node: kz.vip, until: 2026-12-01T00:00:00Z, server: kz1 }`. Times are UTC.
 
-::: warning
-A file with an error is said in the server console with its line, and the
-permissions read before it stay - a typo never leaves the server without admins.
-:::
+> [!WARNING]
+> A file with an error is said in the server console with its line, and the
+> permissions read before it stay - a typo never leaves the server without admins.
 
 ## MySQL
 
@@ -232,10 +242,11 @@ configs and plugins use.
 | `amxx.banTemp` | `v` |
 | `amxx.admin` | `y` |
 
-::: warning amx_mode
-`amx_mode 2` kicks a player without an entry, as `admin.amxx` does: a private
-server. `amx_mode 0` gives nobody anything.
-:::
+> [!WARNING]
+> **amx_mode**
+>
+> `amx_mode 2` kicks a player without an entry, as `admin.amxx` does: a private
+> server. `amx_mode 0` gives nobody anything.
 
 Pawn plugins can check nodes themselves: [PAWN.md](PAWN.md).
 
