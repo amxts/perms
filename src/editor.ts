@@ -12,7 +12,7 @@ import { commit, storageName } from "./state";
 import { momentOf, textOf } from "./time";
 
 const PAGE = "https://amxts.github.io/perms";
-export const DEFAULT_STORE = "https://perms.amxts.workers.dev";
+export const DEFAULT_STORE = "https://perms-store.brokukaschannel.workers.dev";
 const POLL_MS = 3000;
 const LIFETIME_MS = 60 * 60 * 1000;
 

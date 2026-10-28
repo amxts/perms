@@ -8,7 +8,7 @@ compatibility_date = "2026-10-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "perms-store"
-database_id = "<set by wrangler d1 create>"
+database_id = "ff030d07-85bc-4da0-8489-771f89a09649"
 
 # 60 requests a minute per address: a page polls every few seconds, a server every 5.
 [[ratelimits]]
