@@ -141,7 +141,7 @@ function sessionOf(now: number) {
 	for (const flag of FLAGS) nodes.push({ node: `amxx.${flag.name}`, description: `AMX Mod X: ${flag.name} (${flag.letter})`, everyone: false, plugin: "amxx", pawn: true, letter: flag.letter });
 
 	const users = allUsers().map<WireUser>(user => ({ id: user.id, name: user.name, online: false, groups: user.groups.map<WireMembership>(wireMembership), grants: user.grants.map<WireGrant>(wireGrant) }));
-	for (const player of server.players) {
+	for (const player of server.players.filter(each => !each.isBot)) {
 		const id = idOf(player);
 		const known = users.find(user => user.id == id);
 		if (known != null) {

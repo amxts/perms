@@ -270,6 +270,7 @@ describe("the web editor", () => {
 	it("a session goes up, the page's changes come back and apply", async () => {
 		const server = await setup({ files: { [`${CONFIGS}/perms.yaml`]: PERMS }, env: { PERMS_EDITOR_URL: url } });
 		const eve = server.join("Eve", { steamId: "STEAM_0:1:999" });
+		server.join("Record bot", { bot: true });
 
 		server.serverCommand("perms editor");
 		await server.responses();
@@ -281,6 +282,7 @@ describe("the web editor", () => {
 		expect(session.server.context).toBe("");
 		expect(session.groups.map((group: { name: string }) => group.name)).toContain("admin");
 		expect(session.users.find((user: { id: string }) => user.id == "STEAM_0:1:999")?.online).toBe(true);
+		expect(session.users.some((user: { name: string }) => user.name == "Record bot")).toBe(false);
 		expect(session.nodes.find((node: { node: string }) => node.node == "amxx.kick")?.letter).toBe("c");
 
 		await fetch(`${url}/session/${id}/changes`, {
