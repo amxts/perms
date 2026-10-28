@@ -26,6 +26,7 @@ const LIFETIME = 60 * 60 * 1000;
 const MAX_BODY = 256 * 1024;
 const MAX_CHANGES = 1000;
 const ID_LETTERS = "abcdefghijklmnopqrstuvwxyz0123456789";
+const PAGE = "https://amxts.github.io/modules/perms/editor";
 
 const CORS = {
 	"access-control-allow-origin": "*",
@@ -68,6 +69,8 @@ export async function handle(request: Request, sessions: Sessions, now = Date.no
 
 	const url = new URL(request.url);
 	const [, root, id, action] = url.pathname.split("/");
+	// The store's own link to the editor: the browser keeps the #session through the redirect.
+	if (root == "editor" && id == null) return Response.redirect(`${PAGE}?store=${encodeURIComponent(url.origin)}`, 302);
 	if (root != "session") return error(404, "Not found");
 
 	if (id == null || id == "") {

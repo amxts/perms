@@ -38,6 +38,12 @@ describe("the store", () => {
 		expect((await call(sessions, `/session/${id}`, {}, 60 * 60 * 1000)).status).toBe(404);
 	});
 
+	it("its /editor leads to the page with this store", async () => {
+		const response = await call(memorySessions(), "/editor");
+		expect(response.status).toBe(302);
+		expect(response.headers.get("location")).toBe("https://amxts.github.io/modules/perms/editor?store=http%3A%2F%2Fstore");
+	});
+
 	it("bad bodies are refused", async () => {
 		const sessions = memorySessions();
 		expect((await call(sessions, "/session", { method: "POST", body: "[]" })).status).toBe(400);

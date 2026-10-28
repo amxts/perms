@@ -202,7 +202,12 @@ restart, and the page says what it did.
   the database's address never leave the server.
 - The editor keeps a session for an hour on amxts's service. To keep them on
   your own, run the store from this package's `store/` folder (a Cloudflare
-  Worker) and give its address as `PERMS_EDITOR_URL` in `.env`.
+  Worker) and give its address as `PERMS_EDITOR_URL` in `.env`. The link is
+  then your store's, and it opens the same page with your store:
+
+  ```
+  [perms] Open the editor (an hour): https://perms.myserver.com/editor#k3x9q2mw7a
+  ```
 
 ## In place of admin.amxx
 

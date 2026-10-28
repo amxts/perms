@@ -166,8 +166,8 @@ function sessionOf(now: number) {
 
 /** The page's link for the open session. */
 function link() {
-	const query = store == DEFAULT_STORE ? "" : `?store=${encodeURIComponent(store)}`;
-	return `${PAGE}${query}#${sessionId}`;
+	const page = store == DEFAULT_STORE ? PAGE : `${store}/editor`;
+	return `${page}#${sessionId}`;
 }
 
 export function isOpen() {

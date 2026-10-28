@@ -202,7 +202,12 @@ perms editor
   не покидают сервер.
 - Сессия хранится час на сервисе amxts. Чтобы хранить их у себя, запустите
   хранилище из папки `store/` этого пакета (Cloudflare Worker) и укажите его
-  адрес в `PERMS_EDITOR_URL` в `.env`.
+  адрес в `PERMS_EDITOR_URL` в `.env`. Тогда ссылка будет вашего хранилища, и
+  она откроет ту же страницу с вашим хранилищем:
+
+  ```
+  [perms] Open the editor (an hour): https://perms.myserver.com/editor#k3x9q2mw7a
+  ```
 
 ## Вместо admin.amxx
 
