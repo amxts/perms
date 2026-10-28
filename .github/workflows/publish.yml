@@ -1,0 +1,23 @@
+# A release of perms: on its tag v<its own version>, its GitHub Release with
+# the version's section of CHANGELOG.md as the notes, and its release line
+# (amxts/amxts's release-notes.yml). Run by hand with the tag, it replaces the
+# notes. Its npm package, @amxts/perms, is published by hand from the core (npm
+# run publish:npm).
+name: Publish
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: The release's tag, v<version>
+        required: true
+
+jobs:
+  notes:
+    permissions:
+      contents: write
+    uses: amxts/amxts/.github/workflows/release-notes.yml@main
+    with:
+      tag: ${{ inputs.tag || github.ref_name }}

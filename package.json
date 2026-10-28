@@ -1,0 +1,71 @@
+{
+	"name": "@amxts/perms",
+	"type": "module",
+	"version": "0.1.0",
+	"description": "Permissions and groups for amxts servers in place of admin.amxx: nodes, wildcards, inheritance, temporary grants, a file or MySQL, AMX Mod X's flags for Pawn plugins, and a web editor.",
+	"author": {
+		"name": "kukson777",
+		"url": "https://github.com/kukson777"
+	},
+	"license": "MIT",
+	"homepage": "https://github.com/amxts/perms#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/amxts/perms.git"
+	},
+	"keywords": [
+		"amxts-module",
+		"amxts-admin",
+		"amxmodx",
+		"counter-strike"
+	],
+	"exports": {
+		".": "./src/index.ts",
+		"./testing": "./testing/index.ts"
+	},
+	"types": "./src/index.ts",
+	"files": [
+		"PAWN.md",
+		"PAWN.ru.md",
+		"README.md",
+		"README.ru.md",
+		"include",
+		"src",
+		"testing"
+	],
+	"amxts": {
+		"module": "src/index.ts",
+		"natives": "src/natives.ts",
+		"include": "include/perms.inc",
+		"testing": "testing/index.ts"
+	},
+	"scripts": {
+		"test": "vitest run",
+		"store": "node store/dev.ts",
+		"check": "amxts check",
+		"lint": "oxlint && oxfmt --check",
+		"lint:fix": "oxfmt && oxlint --fix --silent || oxlint --fix --silent || oxlint --fix"
+	},
+	"peerDependencies": {
+		"@amxts/config-core": "file:../config-core",
+		"@amxts/core": "file:../../amxts"
+	},
+	"devDependencies": {
+		"@e18e/eslint-plugin": "^0.8.1",
+		"@eslint-community/eslint-plugin-eslint-comments": "^4.8.1",
+		"@stylistic/eslint-plugin": "^5.10.0",
+		"@types/node": "^24.0.0",
+		"eslint-plugin-antfu": "^3.2.3",
+		"eslint-plugin-command": "^4.0.0",
+		"eslint-plugin-n": "^18.4.0",
+		"eslint-plugin-perfectionist": "^5.12.1",
+		"eslint-plugin-regexp": "^3.3.1",
+		"oxfmt": "^0.70.0",
+		"oxlint": "^1.85.0",
+		"typescript": "^6.0.3",
+		"vitest": "^5.0.3"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
+}

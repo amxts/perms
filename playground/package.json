@@ -1,0 +1,9 @@
+{
+	"name": "perms-playground",
+	"type": "module",
+	"private": true,
+	"description": "A project with Perms in it: try the module here, and its tests load this project.",
+	"devDependencies": {
+		"@amxts/perms": "file:.."
+	}
+}
