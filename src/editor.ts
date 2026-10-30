@@ -40,6 +40,8 @@ interface WireUser {
 	id: string;
 	name: string;
 	online: boolean;
+	/** Whether the entry has a password; the password itself never leaves the server. */
+	password: boolean;
 	groups: WireMembership[];
 	grants: WireGrant[];
 }
@@ -140,7 +142,7 @@ function sessionOf(now: number) {
 	const nodes = declaredNodes().map<WireNode>(each => ({ node: each.node, description: each.description, everyone: each.byDefault, plugin: each.node.split(".")[0], pawn: each.pawn, letter: "" }));
 	for (const flag of FLAGS) nodes.push({ node: `amxx.${flag.name}`, description: `AMX Mod X: ${flag.name} (${flag.letter})`, everyone: false, plugin: "amxx", pawn: true, letter: flag.letter });
 
-	const users = allUsers().map<WireUser>(user => ({ id: user.id, name: user.name, online: false, groups: user.groups.map<WireMembership>(wireMembership), grants: user.grants.map<WireGrant>(wireGrant) }));
+	const users = allUsers().map<WireUser>(user => ({ id: user.id, name: user.name, online: false, password: user.password != "", groups: user.groups.map<WireMembership>(wireMembership), grants: user.grants.map<WireGrant>(wireGrant) }));
 	for (const player of server.players.filter(each => !each.isBot)) {
 		const id = idOf(player);
 		const known = users.find(user => user.id == id);
@@ -148,7 +150,7 @@ function sessionOf(now: number) {
 			known.online = true;
 			known.name = player.name;
 		} else {
-			users.push({ id, name: player.name, online: true, groups: [], grants: [] });
+			users.push({ id, name: player.name, online: true, password: false, groups: [], grants: [] });
 		}
 	}
 

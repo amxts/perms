@@ -298,6 +298,7 @@ describe("the web editor", () => {
 		expect(session.server.context).toBe("");
 		expect(session.groups.map((group: { name: string }) => group.name)).toContain("admin");
 		expect(session.users.find((user: { id: string }) => user.id == "STEAM_0:1:999")?.online).toBe(true);
+		expect(session.users.find((user: { id: string }) => user.id == "STEAM_0:1:999")?.password).toBe(false);
 		expect(session.users.some((user: { name: string }) => user.name == "Record bot")).toBe(false);
 		expect(session.nodes.find((node: { node: string }) => node.node == "amxx.kick")?.letter).toBe("c");
 
