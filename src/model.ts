@@ -32,7 +32,7 @@ export interface Group {
 export interface User {
 	id: string;
 	name: string;
-	/** A `name:` entry's password, `sha256:<hex>`; "" for none. */
+	/** The entry's password, `sha256:<hex>`; "" for none. */
 	password: string;
 	groups: Membership[];
 	grants: Grant[];
@@ -41,7 +41,7 @@ export interface User {
 export type ChangeOp
 	= | "grant" | "revoke"
 		| "groupCreate" | "groupDelete" | "groupWeight" | "parentAdd" | "parentRemove"
-		| "memberAdd" | "memberRemove" | "userCreate";
+		| "memberAdd" | "memberRemove" | "userCreate" | "userPassword";
 
 /** One change, the editor's contract in one shape: the fields an op does not use stay empty. */
 export interface Change {
@@ -57,6 +57,8 @@ export interface Change {
 	weight: number;
 	parent: string;
 	name: string;
+	/** A userPassword's password, `sha256:<hex>`; "" takes it away. */
+	password: string;
 }
 
 /** Why a change was skipped, as the editor's contract names it; "" when it was applied. */
@@ -79,7 +81,7 @@ let thisServer = "";
 
 /** A blank change of an op, to fill. */
 export function changeOf(op: ChangeOp) {
-	const change: Change = { op, group: "", user: "", node: "", value: true, until: 0, server: "", weight: 0, parent: "", name: "" };
+	const change: Change = { op, group: "", user: "", node: "", value: true, until: 0, server: "", weight: 0, parent: "", name: "", password: "" };
 	return change;
 }
 
@@ -288,6 +290,7 @@ export function apply(change: Change): SkipCode {
 	if (op == "grant" || op == "revoke") return applyGrant(change);
 	if (op == "memberAdd" || op == "memberRemove") return applyMembership(change);
 	if (op == "userCreate") return applyUserCreate(change);
+	if (op == "userPassword") return applyUserPassword(change);
 	return applyGroup(change);
 }
 
@@ -316,6 +319,13 @@ function applyUserCreate(change: Change): SkipCode {
 
 	const user = userOrNew(change.user, change.name);
 	if (change.name != "") user.name = change.name;
+	return "";
+}
+
+function applyUserPassword(change: Change): SkipCode {
+	if (change.user == "") return "invalid";
+
+	userOrNew(change.user, "").password = change.password;
 	return "";
 }
 

@@ -43,7 +43,7 @@ export const FLAGS: AdminFlag[] = [
 
 // The cvars admin.amxx registers, which server configs set.
 const mode = new Cvar("amx_mode", "1");
-const passwordField = new Cvar("amx_password_field", "_pw");
+export const passwordField = new Cvar("amx_password_field", "_pw");
 const defaultAccess = new Cvar("amx_default_access", "z");
 
 interface PlayerPerms {
@@ -72,10 +72,10 @@ export function sha256(text: string) {
 }
 
 /**
- * The player's entry: by SteamID, then IP, then name with the password his
- * info carries. With `amx_mode 2`, as admin.amxx does, a player without an
- * entry - or with a name entry's wrong password - is kicked; otherwise he
- * plays with the default group's rights.
+ * The player's entry: by SteamID, then IP, then name - and, when the entry has
+ * a password, only with that password in his info. With `amx_mode 2`, as
+ * admin.amxx does, a player without an entry - or with a wrong password - is
+ * kicked; otherwise he plays with the default group's rights.
  */
 function identify(player: Player) {
 	const entry = entryOf(player);
@@ -87,16 +87,10 @@ function identify(player: Player) {
 
 function entryOf(player: Player) {
 	const bySteam = player.steamId.startsWith("STEAM_") && !player.steamId.includes("LAN") ? userWith(player.steamId) : null;
-	if (bySteam != null) return bySteam;
+	const entry = bySteam ?? userWith(`ip:${player.ip}`) ?? userWith(`name:${player.name}`);
+	if (entry == null || entry.password == "" || sha256(player.info.get(passwordField.value)) == entry.password) return entry;
 
-	const byIp = userWith(`ip:${player.ip}`);
-	if (byIp != null) return byIp;
-
-	const byName = userWith(`name:${player.name}`);
-	if (byName == null) return null;
-	if (byName.password == "" || sha256(player.info.get(passwordField.value)) == byName.password) return byName;
-
-	player.print(`[perms] Wrong password for this name: set it with setinfo ${passwordField.value} <password>`, "console");
+	player.print(`[perms] Wrong password for your entry: set it with setinfo ${passwordField.value} <password>`, "console");
 	return null;
 }
 

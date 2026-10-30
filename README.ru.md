@@ -80,6 +80,18 @@ npx amxts module add perms
 | `ip:1.2.3.4` | игрок с этого адреса - для игры без Steam |
 | `name:Bob` | игрок с ником `Bob`, у которого `setinfo _pw` - пароль записи |
 
+Пароль может быть у любой записи, у SteamID тоже: на сервере, куда пускают
+игроков без Steam, SteamID можно подделать. Тогда игрок получает свою запись
+только с `setinfo _pw <пароль>`; с неверным он играет как `default`, а при
+`amx_mode 2` его кикает. Пароль задаёт консоль сервера:
+
+```
+perms user STEAM_0:1:12345 password secret
+perms user STEAM_0:1:12345 password
+```
+
+Вторая строка убирает пароль. В файле хранится только его SHA-256.
+
 ## Файл
 
 `perms.yaml` (или `perms.json`) в папке конфигов, `addons/amxmodx/configs/` -
@@ -161,6 +173,7 @@ perms user <игрок|id> group add <группа> [30d]
 perms user <игрок|id> group remove <группа>
 perms user <игрок|id> permission set <узел> [true|false] [30d]
 perms user <игрок|id> permission unset <узел>
+perms user <игрок|id> password [пароль]
 perms group <группа> create [вес]
 perms group <группа> delete | info
 perms group <группа> permission set <узел> [true|false] [30d]

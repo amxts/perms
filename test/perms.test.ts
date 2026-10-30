@@ -101,12 +101,28 @@ describe("the model", () => {
 		const server = await boot({ [`${CONFIGS}/perms.yaml`]: `${PERMS}  - id: "name:Alice"\n    password: "sha256:${hash}"\n    groups: [admin]\n` });
 		const alice = server.join("Alice", { steamId: "STEAM_0:1:777" });
 		expect(has(server, alice.id, "kz.admin.kick")).toBe(false);
-		expect(alice.console).toContain("Wrong password for this name");
+		expect(alice.console).toContain("Wrong password for your entry");
 
 		alice.info.set("_pw", "secret");
 		server.serverCommand("perms reload");
 		await server.responses();
 		expect(has(server, alice.id, "kz.admin.kick")).toBe(true);
+	}, 120_000);
+
+	it("a SteamID entry with a password from the console counts with it only", async () => {
+		const server = await boot();
+		const bob = server.join("Bob", { steamId: "STEAM_0:1:100" });
+		expect(has(server, bob.id, "kz.admin.kick")).toBe(true);
+
+		server.serverCommand("perms user STEAM_0:1:100 password secret");
+		await server.responses();
+		expect(has(server, bob.id, "kz.admin.kick")).toBe(false);
+		expect(bob.console).toContain("Wrong password for your entry");
+
+		bob.info.set("_pw", "secret");
+		server.serverCommand("perms reload");
+		await server.responses();
+		expect(has(server, bob.id, "kz.admin.kick")).toBe(true);
 	}, 120_000);
 
 	it("the flags of AMX Mod X from the amxx nodes, and its admin list", async () => {

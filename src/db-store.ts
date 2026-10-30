@@ -137,7 +137,7 @@ async function writeChange(change: Change) {
 		await db!.execute("DELETE FROM perms_members WHERE user = ? AND grp = ? AND server = ?", [userWith(change.user)!.id, change.group, change.server]);
 		return;
 	}
-	if (op == "userCreate") {
+	if (op == "userCreate" || op == "userPassword") {
 		await saveUser(change.user);
 		return;
 	}

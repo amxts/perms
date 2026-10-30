@@ -18,7 +18,7 @@ import type { Change } from "./model";
 import { DEFAULT_GROUP, allGroups, answer, changeOf, declaredNodes, explain, groupNamed, groupsOf, normalId, sourcesOf, userWith } from "./model";
 import { closeEditor, openEditor } from "./editor";
 import { importUsers } from "./import";
-import { has, idOf, userOf } from "./players";
+import { has, idOf, passwordField, sha256, userOf } from "./players";
 import { commit, reload, writeEverything } from "./state";
 import { durationSeconds, leftOf } from "./time";
 
@@ -124,7 +124,12 @@ function userCommand(words: string[], print: Print) {
 	}
 
 	if (action == "permission" && (sub == "set" || sub == "unset")) return permissionCommand(change, words, print);
-	print("[perms] perms user <player|id> info | group add|remove <group> [30d] | permission set|unset <node> [true|false] [30d]");
+	if (action == "password") {
+		change.op = "userPassword";
+		change.password = sub != "" ? sha256(sub) : "";
+		return apply([change], print);
+	}
+	print("[perms] perms user <player|id> info | group add|remove <group> [30d] | permission set|unset <node> [true|false] [30d] | password [password]");
 }
 
 /** `permission set|unset <node> [true|false] [30d]`, words from the sub-command on. */
@@ -148,6 +153,7 @@ function userInfo(id: string, print: Print) {
 	print(`  groups: ${groupsOf(user, now).map<string>(group => group.name).join(", ")}`);
 	if (user == null) return;
 
+	if (user.password != "") print(`  password: set, setinfo ${passwordField.value}`);
 	user.groups.forEach(membership => print(`  group ${membership.group}${membership.until != 0 ? `, ${leftOf(membership.until, now)} left` : ""}${membership.server != "" ? ` on ${membership.server}` : ""}`));
 	user.grants.forEach(grant => print(`  ${grant.value ? "" : "-"}${grant.node}${grant.until != 0 ? `, ${leftOf(grant.until, now)} left` : ""}`));
 	if (player != null) print(`  flags: ${player.access.join(", ")}`);

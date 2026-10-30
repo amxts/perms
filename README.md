@@ -80,6 +80,18 @@ password - as `users.ini` finds him:
 | `ip:1.2.3.4` | a player from that address - for a game without Steam |
 | `name:Bob` | a player named `Bob` whose `setinfo _pw` is the entry's password |
 
+Any entry can have a password, a SteamID's too: a SteamID can be faked on a
+server that lets in players without Steam. A player then gets his entry only
+with `setinfo _pw <password>`; with a wrong one he plays as `default`, or is
+kicked under `amx_mode 2`. The server console sets it:
+
+```
+perms user STEAM_0:1:12345 password secret
+perms user STEAM_0:1:12345 password
+```
+
+The second line takes the password away. The file keeps only its SHA-256.
+
 ## The file
 
 `perms.yaml` (or `perms.json`) in the configs folder, `addons/amxmodx/configs/` -
@@ -161,6 +173,7 @@ perms user <player|id> group add <group> [30d]
 perms user <player|id> group remove <group>
 perms user <player|id> permission set <node> [true|false] [30d]
 perms user <player|id> permission unset <node>
+perms user <player|id> password [password]
 perms group <group> create [weight]
 perms group <group> delete | info
 perms group <group> permission set <node> [true|false] [30d]

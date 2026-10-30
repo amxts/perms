@@ -36,7 +36,7 @@ function userOfLine(words: string[]) {
 	const user: User = {
 		id: normalId(id),
 		name: id.startsWith("name:") ? auth : "",
-		password: id.startsWith("name:") && !account.includes("e") && password != "" ? sha256(password) : "",
+		password: !account.includes("e") && password != "" ? sha256(password) : "",
 		groups: [],
 		grants,
 	};
