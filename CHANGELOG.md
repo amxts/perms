@@ -1,5 +1,39 @@
 # Changelog
 
+## v0.2.0
+
+> For the 0.3 cores.
+
+#### 🔑 A password on any entry
+
+A SteamID can be faked on a server that lets players in without Steam, so I let any entry carry a password - a SteamID's and an IP's too, not only a name's. The player gives it with `setinfo _pw`; with a wrong one he plays as `default`. It is set and taken away from the server console, and the file keeps only its SHA-256:
+
+```sh
+perms user STEAM_0:1:12345 password secret
+perms user STEAM_0:1:12345 password          # no password any more
+```
+
+`perms import` keeps `users.ini`'s passwords for SteamID and IP entries too.
+
+The editor's page sees which entries have a password (`password: true`); the password itself never leaves the server.
+
+### ⚠️ Breaking changes
+
+- `perms import` keeps the password of a SteamID or IP entry of `users.ini` that has no `e` flag, as AMX Mod X does: such a player gives it with `setinfo _pw`, or plays as `default`. Before, the import dropped it and let him in by his SteamID alone.
+
+### 👉 Changelog
+
+[compare changes](https://github.com/amxts/perms/compare/v0.1.1...v0.2.0)
+
+### 🚀 Enhancements
+
+- A password on any entry, a SteamID's too ([9706c90](https://github.com/amxts/perms/commit/9706c90))
+- **editor:** The page sees whether an entry has a password ([70be0bb](https://github.com/amxts/perms/commit/70be0bb))
+
+### ❤️ Contributors
+
+- Ernest Manukyan ([@kukson777](https://github.com/kukson777))
+
 ## v0.1.1
 
 > For cores of the 0.3 line from 0.3.2.
