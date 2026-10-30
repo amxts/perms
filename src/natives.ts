@@ -8,7 +8,7 @@ import * as perms from "./index";
 import { declare } from "./model";
 import { onChange, refreshAll } from "./players";
 
-plugin({ name: "Perms", version: "0.1.1", author: "kukson777", description: "Permissions and groups in place of admin.amxx" });
+plugin({ name: "Perms", version: "0.2.0", author: "kukson777", description: "Permissions and groups in place of admin.amxx" });
 
 const changed = new Forward<Player>("perms_changed");
 onChange(player => changed.emit(player));
