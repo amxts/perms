@@ -8,7 +8,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { setup } from "@amxts/core/test-utils";
 import { startStore } from "../store/dev.ts";
 import { permsOf } from "../testing/index.ts";
-import { groupsOf as modelGroupsOf, nextExpiry, replaceAll, sourcesOf } from "../src/model.ts";
+import { allGroups, groupsOf as modelGroupsOf, nextExpiry, primaryGroup, replaceAll, sourcesOf } from "../src/model.ts";
 
 const CONFIGS = "addons/amxmodx/configs";
 
@@ -340,6 +340,14 @@ describe("the web editor", () => {
 });
 
 describe("safety during a reload", () => {
+	it("a call before the config is read does not crash", () => {
+		replaceAll([], []);
+		allGroups().length = 0;
+		expect(primaryGroup(null, Date.now())).toBe("default");
+		expect(modelGroupsOf(null, Date.now())[0].name).toBe("default");
+		replaceAll([], []);
+	});
+
 	it("a call with a user whose groups or grants is null does not crash", () => {
 		replaceAll([], []);
 		const broken = { id: "STEAM_0:1:1", name: "", password: "", groups: null as any, grants: null as any };

@@ -76,7 +76,7 @@ export interface Declared {
 
 export const DEFAULT_GROUP = "default";
 
-let groups: Group[] = [];
+let groups: Group[] = [{ name: DEFAULT_GROUP, weight: 0, inherits: [], grants: [] }];
 let users: User[] = [];
 const declared: Declared[] = [];
 let thisServer = "";
@@ -173,7 +173,7 @@ export function groupsOf(user: User | null, now: number) {
 		}
 	}
 	list.sort((a, b) => b.weight - a.weight);
-	list.push(groupNamed(DEFAULT_GROUP)!);
+	list.push(groupNamed(DEFAULT_GROUP) ?? { name: DEFAULT_GROUP, weight: 0, inherits: [], grants: [] });
 	return list;
 }
 
