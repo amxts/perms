@@ -8,6 +8,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { setup } from "@amxts/core/test-utils";
 import { startStore } from "../store/dev.ts";
 import { permsOf } from "../testing/index.ts";
+import { groupsOf as modelGroupsOf, nextExpiry, replaceAll, sourcesOf } from "../src/model.ts";
 
 const CONFIGS = "addons/amxmodx/configs";
 
@@ -336,4 +337,14 @@ describe("the web editor", () => {
 		expect(status.applied[0].done).toHaveLength(1);
 		expect(status.applied[0].skipped[0].code).toBe("groupMissing");
 	}, 120_000);
+});
+
+describe("safety during a reload", () => {
+	it("a call with a user whose groups or grants is null does not crash", () => {
+		replaceAll([], []);
+		const broken = { id: "STEAM_0:1:1", name: "", password: "", groups: null as any, grants: null as any };
+		expect(() => modelGroupsOf(broken, Date.now())).not.toThrow();
+		expect(() => sourcesOf(broken, Date.now())).not.toThrow();
+		expect(() => nextExpiry([broken], Date.now())).not.toThrow();
+	});
 });

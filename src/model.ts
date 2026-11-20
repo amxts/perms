@@ -167,7 +167,7 @@ function grantsOf(list: Grant[], now: number) {
 export function groupsOf(user: User | null, now: number) {
 	const list: Group[] = [];
 	if (user != null) {
-		for (const membership of user.groups) {
+		for (const membership of user.groups ?? []) {
 			const group = groupNamed(membership.group);
 			if (group != null && group.name != DEFAULT_GROUP && counts(membership.until, membership.server, now) && !list.includes(group)) list.push(group);
 		}
@@ -195,7 +195,7 @@ function withParents(group: Group, into: Group[]) {
  */
 export function sourcesOf(user: User | null, now: number) {
 	const sources: Map<string, boolean>[] = [];
-	if (user != null) sources.push(grantsOf(user.grants, now));
+	if (user != null) sources.push(grantsOf(user.grants ?? [], now));
 
 	const chain: Group[] = [];
 	for (const group of groupsOf(user, now)) withParents(group, chain);
@@ -256,8 +256,8 @@ export function nextExpiry(online: User[], now: number) {
 	const ends: number[] = [];
 	for (const group of groups) group.grants.forEach(grant => ends.push(grant.until));
 	for (const user of online) {
-		user.grants.forEach(grant => ends.push(grant.until));
-		user.groups.forEach(membership => ends.push(membership.until));
+		(user.grants ?? []).forEach(grant => ends.push(grant.until));
+		(user.groups ?? []).forEach(membership => ends.push(membership.until));
 	}
 	return ends.filter(until => until > now).reduce((next, until) => (next == 0 || until < next ? until : next), 0);
 }
