@@ -235,6 +235,19 @@ describe("a TypeScript plugin", () => {
 		server.serverCommand("perms nodes myplugin");
 		expect(server.log).toContain("myplugin.help (everyone) - Use /help");
 	}, 180_000);
+
+	it("a reload redeclares without 'declared twice'", async () => {
+		const server = await setup({ rootDir: "playground", files: { [`${CONFIGS}/perms.yaml`]: PERMS } });
+		const plugin = server.plugins.find(p => p.source.endsWith("kick.ts"))!;
+		const linesBefore = server.logLines.length;
+
+		await server.reload(plugin);
+		const afterReload = server.logLines.slice(linesBefore).join("\n");
+		expect(afterReload).not.toContain("declared twice");
+
+		server.serverCommand("perms nodes myplugin");
+		expect(server.log).toContain("myplugin.kick - Kick players");
+	}, 180_000);
 });
 
 describe("the permissions in MySQL", () => {

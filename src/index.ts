@@ -7,7 +7,7 @@
 import { Player } from "@amxts/core";
 import { callingPlugin, onPluginStop } from "@amxts/core/kit";
 import type { GrantOptions, PermissionInfo, PermsChangeEvent, PermsOptions } from "./types";
-import { changeOf, declare as declareNode, primaryGroup, groupsOf as groupsOfUser } from "./model";
+import { changeOf, declare as declareNode, forgetPlugin, primaryGroup, groupsOf as groupsOfUser } from "./model";
 import * as players from "./players";
 import { commit } from "./state";
 import { start } from "./server";
@@ -34,10 +34,11 @@ export default defineModule<PermsOptions>({
  *     });
  */
 export function declare(permissions: Record<string, PermissionInfo>) {
+	const plugin = callingPlugin();
 	const nodes = Object.keys(permissions);
 	for (const node of nodes) {
 		const info = permissions[node]!;
-		if (!declareNode(node, info.description, info.everyone ?? false, false)) console.error(`[perms] "${node}" is declared twice - the first declaration stays`);
+		if (!declareNode(node, info.description, info.everyone ?? false, false, plugin)) console.error(`[perms] "${node}" is declared twice - the first declaration stays`);
 	}
 	players.refreshAll();
 }
@@ -124,4 +125,5 @@ players.onChange((player) => {
 
 onPluginStop((plugin) => {
 	listeners = listeners.filter(each => each.from != plugin);
+	forgetPlugin(plugin);
 });

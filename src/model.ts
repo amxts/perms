@@ -70,6 +70,8 @@ export interface Declared {
 	byDefault: boolean;
 	/** Declared by a Pawn plugin, through perms_declare. */
 	pawn: boolean;
+	/** The plugin that declared it, from callingPlugin(); 0 for the module's own or a Pawn plugin. */
+	plugin: number;
 }
 
 export const DEFAULT_GROUP = "default";
@@ -126,11 +128,18 @@ export function normalId(id: string) {
 // ---------------------------------------------------------------- declared nodes
 
 /** Declares a node; `false` when another plugin declared it first. */
-export function declare(node: string, description: string, byDefault: boolean, pawn: boolean) {
+export function declare(node: string, description: string, byDefault: boolean, pawn: boolean, plugin = 0) {
 	if (declared.some(each => each.node == node)) return false;
 
-	declared.push({ node, description, byDefault, pawn });
+	declared.push({ node, description, byDefault, pawn, plugin });
 	return true;
+}
+
+/** Drops every node a stopped plugin declared, so a reload declares them again. */
+export function forgetPlugin(plugin: number) {
+	for (let i = declared.length - 1; i >= 0; i--) {
+		if (declared[i].plugin == plugin) declared.splice(i, 1);
+	}
 }
 
 export function declaredNodes() {
