@@ -44,7 +44,8 @@
 		"store": "node store/dev.ts",
 		"check": "amxts check",
 		"lint": "oxlint && oxfmt --check",
-		"lint:fix": "oxfmt && oxlint --fix --silent || oxlint --fix --silent || oxlint --fix"
+		"lint:fix": "oxfmt && oxlint --fix --silent || oxlint --fix --silent || oxlint --fix",
+		"prepublishOnly": "node -e \"console.error('Publish from the core: npm run publish:npm there packs every package and replaces its file: dependencies.');process.exit(1)\""
 	},
 	"peerDependencies": {
 		"@amxts/config-core": "file:../config-core",
