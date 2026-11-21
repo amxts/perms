@@ -1,5 +1,28 @@
 # Changelog
 
+## v0.2.1
+
+> For the 0.3 line of the core.
+
+### 🩹 Important fixes
+
+- A hot reload of a plugin that declares permissions printed "X is declared twice" for each of them, and a declaration that changed in the reload was not taken. A plugin's declarations now go with it when it stops ([6d3f491](https://github.com/amxts/perms/commit/6d3f491)).
+- A plugin that asked for a permission while perms was being hot-reloaded, before perms had read its file, stopped perms with "Unexpected 'null'". The `default` group now exists from the start, so the answer is the default group's until the file is read ([6d9fd57](https://github.com/amxts/perms/commit/6d9fd57)).
+
+### 👉 Changelog
+
+[compare changes](https://github.com/amxts/perms/compare/v0.2.0...v0.2.1)
+
+### 🩹 Fixes
+
+- Forget a stopped plugin's declared nodes ([6d3f491](https://github.com/amxts/perms/commit/6d3f491))
+- Guard against null user fields during a reload ([a70a008](https://github.com/amxts/perms/commit/a70a008))
+- Default group exists before the config is read ([6d9fd57](https://github.com/amxts/perms/commit/6d9fd57))
+
+### ❤️ Contributors
+
+- Ernest Manukyan ([@kukson777](https://github.com/kukson777))
+
 ## v0.2.0
 
 > For the 0.3 cores.
