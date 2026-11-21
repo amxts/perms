@@ -1,5 +1,19 @@
 # Changelog
 
+## v0.2.2
+
+> For amxts 0.3.5 and later.
+
+0.2.2 is 0.2.1 published again. 0.2.1 reached npm with dependencies on folders on my machine and could not be installed, so it is deprecated.
+
+### 👉 Changelog
+
+[compare changes](https://github.com/amxts/perms/compare/v0.2.1...v0.2.2)
+
+### ❤️ Contributors
+
+- Ernest Manukyan ([@kukson777](https://github.com/kukson777))
+
 ## v0.2.1
 
 > For the 0.3 line of the core.
