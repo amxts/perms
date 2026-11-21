@@ -4,7 +4,7 @@
 
 > For amxts 0.3.5 and later.
 
-0.2.2 is 0.2.1 published again. 0.2.1 reached npm with dependencies on folders on my machine and could not be installed, so it is deprecated.
+0.2.1 was published broken: `npm install` failed on it. 0.2.2 is the same code, published properly.
 
 ### 👉 Changelog
 
