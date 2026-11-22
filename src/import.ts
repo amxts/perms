@@ -1,6 +1,6 @@
 /**
  * `perms import users.ini`: AMX Mod X's admins, each line a player with his
- * flags as `amxx.*` grants of his own.
+ * flags as `amxx.*` grants of his own, added to his entry when he has one.
  *
  *     "STEAM_0:0:123456" "" "abcdefghijklmnopqrstu" "ce"
  *     "Bob"              "secret" "abc"               "a"
@@ -43,6 +43,15 @@ function userOfLine(words: string[]) {
 	return user;
 }
 
+/** An imported line on a player perms has already: his flags are added, his name, groups and other permissions stay. */
+function merge(known: User, imported: User) {
+	for (const grant of imported.grants) {
+		if (!known.grants.some(each => each.node == grant.node && each.server == "")) known.grants.push(grant);
+	}
+	if (known.name == "") known.name = imported.name;
+	if (known.password == "") known.password = imported.password;
+}
+
 /** Reads `users.ini` (or another file of the configs folder) into the model; how many players it held, -1 when there is no file. */
 export function importUsers(file: string) {
 	const text = fs.readFileSync(`${server.configsDir}/${file}`);
@@ -55,9 +64,9 @@ export function importUsers(file: string) {
 		if (words.length < 3 || words[0] == "") continue;
 
 		const user = userOfLine(words);
-		const at = users.findIndex(each => each.id == user.id);
-		if (at >= 0) users[at] = user;
-		else users.push(user);
+		const known = users.find(each => each.id == user.id);
+		if (known == null) users.push(user);
+		else merge(known, user);
 	}
 	return lines.length;
 }
