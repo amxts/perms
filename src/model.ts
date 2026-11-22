@@ -80,6 +80,7 @@ let groups: Group[] = [{ name: DEFAULT_GROUP, weight: 0, inherits: [], grants: [
 let users: User[] = [];
 const declared: Declared[] = [];
 let thisServer = "";
+let thisContext = "";
 
 /** A blank change of an op, to fill. */
 export function changeOf(op: ChangeOp) {
@@ -108,6 +109,31 @@ export function setThisServer(name: string) {
 
 export function serverName() {
 	return thisServer;
+}
+
+/** The mode the server plays now (`perms_context`): an entry for it counts as one for this server; empty for none. */
+export function setContext(name: string) {
+	thisContext = name;
+}
+
+export function contextName() {
+	return thisContext;
+}
+
+/** Every server or mode an entry names, with this server and its mode, each once. */
+export function knownContexts() {
+	const names: string[] = [];
+	const add = (name: string) => {
+		if (name != "" && !names.includes(name)) names.push(name);
+	};
+	add(thisServer);
+	add(thisContext);
+	for (const group of groups) group.grants.forEach(grant => add(grant.server));
+	for (const user of users) {
+		user.grants.forEach(grant => add(grant.server));
+		user.groups.forEach(membership => add(membership.server));
+	}
+	return names;
 }
 
 export function groupNamed(name: string) {
@@ -149,7 +175,7 @@ export function declaredNodes() {
 // ---------------------------------------------------------------- answers
 
 function counts(until: number, server: string, now: number) {
-	return (until == 0 || until > now) && (server == "" || server == thisServer);
+	return (until == 0 || until > now) && (server == "" || server == thisServer || server == thisContext);
 }
 
 /** A group's own grants that count now, as node -> value; a negation wins over a grant of the same node. */

@@ -133,9 +133,46 @@ describe("the model", () => {
 		expect(bob.flags).toBe(RESERVATION | KICK | BAN);
 		expect(permsOf(server).admins.find(admin => admin.auth == "STEAM_0:1:100")?.access).toBe(RESERVATION | KICK | BAN);
 	}, 120_000);
+
+	it("an entry for a mode counts while perms_context names it, flags too", async () => {
+		const server = await boot({ [`${CONFIGS}/perms.yaml`]: `${PERMS}  - id: "STEAM_0:1:400"
+    groups:
+      - { group: vip, server: kz }
+    permissions:
+      - { node: amxx.kick, server: classic }
+` });
+		const fay = server.join("Fay", { steamId: "STEAM_0:1:400" });
+		expect(has(server, fay.id, "shop.discount")).toBe(false);
+
+		server.setCvar("perms_context", "kz");
+		await server.responses();
+		expect(has(server, fay.id, "shop.discount")).toBe(true);
+		expect(fay.flags & KICK).toBe(0);
+
+		server.setCvar("perms_context", "classic");
+		await server.responses();
+		expect(has(server, fay.id, "shop.discount")).toBe(false);
+		expect(fay.flags & KICK).toBe(KICK);
+		expect(server.file(`${CONFIGS}/perms.yaml`)).not.toContain("perms_context");
+	}, 120_000);
 });
 
 describe("the commands", () => {
+	it("import adds the flags to a known player and keeps his name and groups", async () => {
+		const server = await boot({ [`${CONFIGS}/perms.yaml`]: PERMS, [`${CONFIGS}/users.ini`]: `"STEAM_0:1:100" "" "c" "ce"
+"STEAM_0:1:500" "" "ab" "ce"
+` });
+		server.serverCommand("perms import");
+		await server.responses();
+
+		const file = server.file(`${CONFIGS}/perms.yaml`)!;
+		expect(file).toContain("STEAM_0:1:500");
+		const bob = server.join("Bob", { steamId: "STEAM_0:1:100" });
+		expect(server.native("perms_get_group", bob.id)).toBe("admin");
+		expect(has(server, bob.id, "kz.admin.kick")).toBe(true);
+		expect(file).toMatch(/name: Bob/);
+	}, 120_000);
+
 	it("a group given for a while, and taken away", async () => {
 		const server = await boot();
 		const eve = server.join("Eve", { steamId: "STEAM_0:1:999" });

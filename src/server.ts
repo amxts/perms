@@ -3,13 +3,16 @@
  * `.env`, players worked out as they join and rename, the commands, and
  * admin.amxx's commands for the configs and plugins that use them.
  */
-import { env, game, server } from "@amxts/core";
+import { Cvar, env, game, server } from "@amxts/core";
 import type { PermsOptions } from "./types";
-import { declare, setThisServer } from "./model";
+import { declare, setContext, setThisServer } from "./model";
 import { DEFAULT_STORE, setStore } from "./editor";
 import { run } from "./commands";
 import { forget, refresh, refreshAll, writesFlags } from "./players";
 import { open, reload } from "./state";
+
+/** The mode the server plays now, set by its config (`perms_context kz`); never written to the file. */
+const context = new Cvar("perms_context", "");
 
 /** A player who joined the game; one only connecting is worked out when he joins. */
 function refreshSlot(id: number) {
@@ -39,7 +42,12 @@ export function start(options: PermsOptions) {
 			});
 		}
 
+		setContext(context.value.trim());
 		open(options.file, env("PERMS_DB", ""));
+	});
+	context.addEventListener("change", (event) => {
+		setContext(event.value.trim());
+		refreshAll();
 	});
 
 	server.addEventListener("authorized", event => refreshSlot(event.player.id));

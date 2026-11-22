@@ -6,7 +6,7 @@
  */
 import { Cvar, clearInterval, fetch, server, setInterval } from "@amxts/core";
 import type { Change, ChangeOp, Grant, Membership } from "./model";
-import { allGroups, allUsers, changeOf, declaredNodes, serverName, userWith } from "./model";
+import { allGroups, allUsers, changeOf, contextName, declaredNodes, knownContexts, serverName, userWith } from "./model";
 import { FLAGS, idOf } from "./players";
 import { commit, storageName } from "./state";
 import { momentOf, textOf } from "./time";
@@ -59,7 +59,10 @@ interface WireServer {
 	name: string;
 	address: string;
 	storage: string;
+	/** The server or mode entries count on now; "" for none. */
 	context: string;
+	/** Every server and mode an entry names, the one in effect included. */
+	contexts: string[];
 }
 
 interface Session {
@@ -156,7 +159,7 @@ function sessionOf(now: number) {
 
 	const session: Session = {
 		version: 1,
-		server: { name: new Cvar("hostname").value, address: new Cvar("net_address").value, storage: storageName(), context: serverName() },
+		server: { name: new Cvar("hostname").value, address: new Cvar("net_address").value, storage: storageName(), context: contextName() != "" ? contextName() : serverName(), contexts: knownContexts() },
 		createdAt: textOf(now),
 		expiresAt: textOf(now + LIFETIME_MS),
 		nodes,

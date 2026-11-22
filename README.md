@@ -144,6 +144,20 @@ reaches the others within five seconds.
 `PERMS_SERVER` names this server: a group or a permission given with
 `server: kz1` counts on it alone.
 
+## Modes
+
+A server that switches modes sets the one it plays with the `perms_context`
+cvar, in each mode's config:
+
+```ini
+perms_context kz
+```
+
+A group or a permission given with `server: kz` counts only while the mode is
+`kz`. One without `server:` counts in every mode and on every server. When the
+cvar changes, the players' permissions and AMX Mod X flags are worked out again
+at once. The cvar is never written to `perms.yaml`.
+
 ## In code
 
 ```ts
@@ -229,8 +243,9 @@ restart, and the page says what it did.
    of them runs, the module leaves the players' flags, AMX Mod X's admin list
    and `amx_reloadadmins` to it and says so in the console.
 3. In the server console: `perms import users.ini`. Each admin becomes an entry
-   with his flags as `amxx.*` permissions of his own. Check one with
-   `perms user <name> info`.
+   with his flags as `amxx.*` permissions of his own. An admin who already has
+   an entry gets the flags added to it, and his name and groups stay. Check one
+   with `perms user <name> info`.
 
 `users.ini` is not read again; it stays for going back.
 
