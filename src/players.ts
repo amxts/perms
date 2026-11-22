@@ -5,7 +5,7 @@
  */
 import { Cvar, Player, clearTimeout, server, setTimeout } from "@amxts/core";
 import { Hash_Sha256 } from "@amxts/core/constants";
-import { admins_flush, admins_push, hash_string, read_flags, remove_user_flags, set_user_flags } from "@amxts/core/natives";
+import { admins_flush, admins_push, find_plugin_byfile, hash_string, read_flags, remove_user_flags, set_user_flags } from "@amxts/core/natives";
 import type { User } from "./model";
 import { allUsers, answer, nextExpiry, primaryGroup, sourcesOf, userWith } from "./model";
 
@@ -55,16 +55,26 @@ interface PlayerPerms {
 
 const online = new Map<number, PlayerPerms>();
 const listeners: ((player: Player) => void)[] = [];
-let writesFlags = true;
 let expiry = 0;
+/** Plugins that write the players' flags themselves. */
+const ADMIN_PLUGINS = ["admin.amxx", "admin_sql.amxx"];
+/** The one of them last found running, said once in the console; "" for none. */
+let adminPlugin = "";
 
 export function onChange(listener: (player: Player) => void) {
 	listeners.push(listener);
 }
 
-/** Whether the module writes the players' flags; not while admin.amxx does. */
-export function setWritesFlags(on: boolean) {
-	writesFlags = on;
+/**
+ * Whether the module writes the players' flags and AMX Mod X's admin list:
+ * not while admin.amxx or admin_sql.amxx runs. Asked at each write, so a
+ * load that did not see the plugin does not take its admins from it.
+ */
+export function writesFlags() {
+	const running = ADMIN_PLUGINS.find(file => find_plugin_byfile(file) >= 0) ?? "";
+	if (running != "" && running != adminPlugin) console.error(`[perms] ${running} is running and gives the players' flags itself - perms does not; comment it out in plugins.ini`);
+	adminPlugin = running;
+	return running == "";
 }
 
 export function sha256(text: string) {
@@ -114,7 +124,7 @@ export function refresh(player: Player) {
 	const before = online.get(player.id);
 	online.set(player.id, { user, sources, signature });
 
-	if (writesFlags) {
+	if (writesFlags()) {
 		remove_user_flags(player.id);
 		set_user_flags(player.id, read_flags(letters));
 	}
@@ -155,7 +165,7 @@ export function idOf(player: Player) {
 
 /** AMX Mod X's own list of admins, as admin.amxx fills it, for plugins that read it with admins_lookup. */
 function fillAdminCache() {
-	if (!writesFlags) return;
+	if (!writesFlags()) return;
 
 	admins_flush();
 	const now = Date.now();

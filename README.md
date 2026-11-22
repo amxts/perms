@@ -226,8 +226,8 @@ restart, and the page says what it did.
 
 1. `npx amxts module add perms`, build and deploy.
 2. Comment out `admin.amxx` (or `admin_sql.amxx`) in `plugins.ini`. While one
-   of them runs, the module leaves the players' flags to it and says so in the
-   console.
+   of them runs, the module leaves the players' flags, AMX Mod X's admin list
+   and `amx_reloadadmins` to it and says so in the console.
 3. In the server console: `perms import users.ini`. Each admin becomes an entry
    with his flags as `amxx.*` permissions of his own. Check one with
    `perms user <name> info`.

@@ -213,6 +213,37 @@ describe("the commands", () => {
 		expect(bob.flags).toBe(USER);
 		expect(server.log).toContain("admin.amxx is running");
 	}, 120_000);
+
+	it("admin.amxx found after the start: its flags and its admin list are left to it from then on", async () => {
+		const server = await boot();
+		const kit = permsOf(server);
+		expect(kit.admins.length).toBeGreaterThan(0); // perms fills the list while nothing else does
+
+		kit.loadedPlugins.push("admin.amxx");
+		const own = { auth: "STEAM_0:0:42", password: "", access: KICK, flags: 0 };
+		kit.admins.splice(0, kit.admins.length, own); // what admin.amxx read from users.ini
+		server.serverCommand("perms reload");
+		await server.responses();
+
+		const bob = server.join("Bob", { steamId: "STEAM_0:1:100", flags: "z" });
+		expect(bob.flags).toBe(USER);
+		expect(kit.admins).toEqual([own]);
+		expect(server.log).toContain("admin.amxx is running");
+	}, 120_000);
+
+	it("amx_reloadadmins is admin.amxx's while it runs, perms' without it", async () => {
+		for (const running of [false, true]) {
+			const server = await setup({ files: { [`${CONFIGS}/perms.yaml`]: PERMS }, start: false });
+			if (running) permsOf(server).loadedPlugins.push("admin.amxx");
+			server.start();
+			const eve = server.join("Eve", { steamId: "STEAM_0:1:999" });
+
+			server.writeFile(`${CONFIGS}/perms.yaml`, `${PERMS}  - id: "STEAM_0:1:999"\n    groups: [admin]\n`);
+			server.serverCommand("amx_reloadadmins");
+			await server.responses();
+			expect(has(server, eve.id, "kz.admin.kick")).toBe(!running);
+		}
+	}, 180_000);
 });
 
 describe("a TypeScript plugin", () => {

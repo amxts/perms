@@ -4,16 +4,12 @@
  * admin.amxx's commands for the configs and plugins that use them.
  */
 import { env, game, server } from "@amxts/core";
-import { find_plugin_byfile } from "@amxts/core/natives";
 import type { PermsOptions } from "./types";
 import { declare, setThisServer } from "./model";
 import { DEFAULT_STORE, setStore } from "./editor";
 import { run } from "./commands";
-import { forget, refresh, refreshAll, setWritesFlags } from "./players";
+import { forget, refresh, refreshAll, writesFlags } from "./players";
 import { open, reload } from "./state";
-
-/** Plugins that write the players' flags themselves. */
-const ADMIN_PLUGINS = ["admin.amxx", "admin_sql.amxx"];
 
 /** A player who joined the game; one only connecting is worked out when he joins. */
 function refreshSlot(id: number) {
@@ -33,11 +29,16 @@ export function start(options: PermsOptions) {
 	declare("perms.view", "See groups and permissions with the perms commands in the game", false, false);
 
 	server.addEventListener("init", () => {
-		const running = ADMIN_PLUGINS.filter(file => find_plugin_byfile(file) >= 0);
-		if (running.length > 0) {
-			setWritesFlags(false);
-			console.error(`[perms] ${running.join(", ")} is running and gives the players' flags itself - perms does not; comment it out in plugins.ini`);
+		// The engine keeps the first handler a command's name gets, and on the
+		// first map this plugin loads before the Pawn plugins: taken here, after
+		// their plugin_init, and only without admin.amxx, amx_reloadadmins stays
+		// admin.amxx's while it runs.
+		if (writesFlags()) {
+			server.addServerCommand("amx_reloadadmins", () => {
+				reload();
+			});
 		}
+
 		open(options.file, env("PERMS_DB", ""));
 	});
 
@@ -54,9 +55,6 @@ export function start(options: PermsOptions) {
 	});
 	server.addCommand("/perms [args]", ({ player, args }) => {
 		run(player, splitWords(args ?? ""), line => player.print(line, "console"));
-	});
-	server.addServerCommand("amx_reloadadmins", () => {
-		reload();
 	});
 	server.addEventListener("configsExecuted", () => refreshAll());
 }
