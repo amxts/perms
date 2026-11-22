@@ -1,5 +1,30 @@
 # Changelog
 
+## v0.2.3
+
+> For amxts 0.3.7 and later.
+
+### 🩹 Important fixes
+
+- With admin.amxx on the server, an admin from `users.ini` could lose his flags: perms wrote its own over admin.amxx's, and he was left with `amx_default_access`. While admin.amxx runs, perms leaves the flags to it ([72592ae](https://github.com/amxts/perms/commit/72592ae)).
+- perms took `amx_reloadadmins` away from admin.amxx, so the command reloaded nothing of admin.amxx's. While admin.amxx runs, the command is admin.amxx's again; `perms reload` reloads perms. Restart the server once after updating: until then the old perms still holds the command ([72592ae](https://github.com/amxts/perms/commit/72592ae)).
+
+### 👉 Changelog
+
+[compare changes](https://github.com/amxts/perms/compare/v0.2.2...v0.2.3)
+
+### 🩹 Fixes
+
+- Leave `admin.amxx` its admins and `amx_reloadadmins` ([72592ae](https://github.com/amxts/perms/commit/72592ae))
+
+### 📖 Documentation
+
+- The `v0.2.2` changelog's npm note, shorter ([57ee91d](https://github.com/amxts/perms/commit/57ee91d))
+
+### ❤️ Contributors
+
+- Ernest Manukyan ([@kukson777](https://github.com/kukson777))
+
 ## v0.2.2
 
 > For amxts 0.3.5 and later.
