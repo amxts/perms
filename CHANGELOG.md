@@ -1,5 +1,48 @@
 # Changelog
 
+## v0.2.4
+
+> For amxts 0.3.7 and later.
+
+### 👀 Highlights
+
+#### 🔀 Permissions per mode
+
+A server that switches modes sets the one it plays with the `perms_context` cvar, in each mode's config:
+
+```ini
+perms_context kz
+```
+
+A group or a permission given with `server: kz` counts only while the mode is `kz`. One without `server:` counts in every mode and on every server. When the cvar changes, the players' permissions and AMX Mod X flags are worked out again at once. The cvar is never written to `perms.yaml`.
+
+The web editor offers every mode an entry names. To offer the others before any entry names them, list them in `addons/amxts/.env`:
+
+```ini
+PERMS_CONTEXTS=kz,classic,nhnse
+```
+
+### 🩹 Important fixes
+
+- `perms import` replaced the entry of an admin perms already had, and his name, groups and other permissions were lost. The imported flags are added to his entry, and the rest of it stays ([9558680](https://github.com/amxts/perms/commit/9558680)).
+
+### 👉 Changelog
+
+[compare changes](https://github.com/amxts/perms/compare/v0.2.3...v0.2.4)
+
+### 🚀 Enhancements
+
+- `perms_context`, the mode entries count in ([4c15c2b](https://github.com/amxts/perms/commit/4c15c2b))
+- `PERMS_CONTEXTS`, the modes the editor offers ([4ed85d6](https://github.com/amxts/perms/commit/4ed85d6))
+
+### 🩹 Fixes
+
+- **import:** Keep a known player's name and groups ([9558680](https://github.com/amxts/perms/commit/9558680))
+
+### ❤️ Contributors
+
+- Ernest Manukyan ([@kukson777](https://github.com/kukson777))
+
 ## v0.2.3
 
 > For amxts 0.3.7 and later.
