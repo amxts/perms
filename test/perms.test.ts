@@ -8,7 +8,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { setup } from "@amxts/core/test-utils";
 import { startStore } from "../store/dev.ts";
 import { permsOf } from "../testing/index.ts";
-import { allGroups, groupsOf as modelGroupsOf, nextExpiry, primaryGroup, replaceAll, sourcesOf } from "../src/model.ts";
+import { allGroups, groupsOf as modelGroupsOf, knownContexts, nextExpiry, primaryGroup, replaceAll, setContext, setContexts, setThisServer, sourcesOf } from "../src/model.ts";
 
 const CONFIGS = "addons/amxmodx/configs";
 
@@ -56,6 +56,17 @@ function has(server: Awaited<ReturnType<typeof boot>>, id: number, node: string)
 }
 
 describe("the model", () => {
+	it("the editor offers this server, its mode, the listed modes and the ones entries name, each once", () => {
+		setThisServer("kz1");
+		setContext("kz");
+		setContexts(["kz", "classic"]);
+		replaceAll([], [{ id: "STEAM_0:1:1", name: "", password: "", groups: [{ group: "vip", until: 0, server: "nhnse" }], grants: [] }]);
+		expect(knownContexts()).toEqual(["kz1", "kz", "classic", "nhnse"]);
+		setContext("");
+		setContexts([]);
+		setThisServer("");
+	});
+
 	it("groups, inheritance, wildcards and negation", async () => {
 		const server = await boot();
 		const bob = server.join("Bob", { steamId: "STEAM_0:1:100" });

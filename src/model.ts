@@ -81,6 +81,7 @@ let users: User[] = [];
 const declared: Declared[] = [];
 let thisServer = "";
 let thisContext = "";
+let listedContexts: string[] = [];
 
 /** A blank change of an op, to fill. */
 export function changeOf(op: ChangeOp) {
@@ -120,7 +121,12 @@ export function contextName() {
 	return thisContext;
 }
 
-/** Every server or mode an entry names, with this server and its mode, each once. */
+/** The modes the server has (`PERMS_CONTEXTS=kz,classic`), offered in the editor before any entry names them. */
+export function setContexts(names: string[]) {
+	listedContexts = names;
+}
+
+/** Every server or mode an entry names, with this server, its mode and the listed ones, each once. */
 export function knownContexts() {
 	const names: string[] = [];
 	const add = (name: string) => {
@@ -128,6 +134,7 @@ export function knownContexts() {
 	};
 	add(thisServer);
 	add(thisContext);
+	listedContexts.forEach(add);
 	for (const group of groups) group.grants.forEach(grant => add(grant.server));
 	for (const user of users) {
 		user.grants.forEach(grant => add(grant.server));

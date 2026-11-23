@@ -5,7 +5,7 @@
  */
 import { Cvar, env, game, server } from "@amxts/core";
 import type { PermsOptions } from "./types";
-import { declare, setContext, setThisServer } from "./model";
+import { declare, setContext, setContexts, setThisServer } from "./model";
 import { DEFAULT_STORE, setStore } from "./editor";
 import { run } from "./commands";
 import { forget, refresh, refreshAll, writesFlags } from "./players";
@@ -27,6 +27,7 @@ function splitWords(text: string) {
 
 export function start(options: PermsOptions) {
 	setThisServer(env("PERMS_SERVER", ""));
+	setContexts(env("PERMS_CONTEXTS", "").split(",").map<string>(name => name.trim()).filter(name => name != ""));
 	const editor = env("PERMS_EDITOR_URL", "");
 	setStore(editor != "" ? editor : options.editor != "" ? options.editor : DEFAULT_STORE);
 	declare("perms.view", "See groups and permissions with the perms commands in the game", false, false);

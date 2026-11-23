@@ -158,6 +158,13 @@ A group or a permission given with `server: kz` counts only while the mode is
 cvar changes, the players' permissions and AMX Mod X flags are worked out again
 at once. The cvar is never written to `perms.yaml`.
 
+The web editor offers every mode an entry names. To offer the others before
+any entry names them, list them in `addons/amxts/.env`:
+
+```ini
+PERMS_CONTEXTS=kz,classic,nhnse
+```
+
 ## In code
 
 ```ts
